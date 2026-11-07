@@ -1,4 +1,4 @@
-const API_BASE = localStorage.getItem("DIT_API_BASE") || "https://YOUR-BACKEND.onrender.com";
+const API_BASE = localStorage.getItem("DIT_API_BASE") || "https://dit-hr-recruitment-automation.onrender.com";
 let candidates=[], exceptions=[], chart=null;
 const $=id=>document.getElementById(id);
 function toast(msg){const t=$("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",3000)}
