@@ -1,0 +1,4 @@
+candidate_id,full_name,email,phone,education,experience_years,skills,location,notice_period_days,expected_salary,applied_role
+DIT-C001,Arun Kumar,arun.kumar@example.com,9876543210,Bachelor of Engineering,3,"Python, SQL, Excel",Chennai,30,450000,Python Developer
+DIT-C002,Meena Raj,meena.raj@example.com,9876501234,Master of Computer Applications,1,"Java, HTML, CSS",Madurai,90,350000,Python Developer
+DIT-C003,Karthik S,wrong-email,12345,Diploma,2,"Python, SQL",Trichy,45,300000,Python Developer
