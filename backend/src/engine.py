@@ -36,24 +36,11 @@ REQUIRED_COLUMNS = [
 # --------------------------------------------------
 
 SKILL_BANK = [
-    "python",
-    "java",
-    "sql",
-    "excel",
-    "power bi",
-    "tableau",
-    "javascript",
-    "html",
-    "css",
-    "react",
-    "django",
-    "flask",
-    "machine learning",
-    "communication",
-    "project management",
-    "testing",
-    "git",
-    "aws"
+    "python", "java", "sql", "excel", "power bi",
+    "tableau", "javascript", "html", "css", "react",
+    "django", "flask", "machine learning",
+    "communication", "project management",
+    "testing", "git", "aws"
 ]
 
 
@@ -112,26 +99,13 @@ def validate_candidates(
         )
 
     # Clean text fields
-    data["full_name"] = (
-        data["full_name"]
-        .fillna("")
-        .astype(str)
-        .str.strip()
-    )
-
-    data["email"] = (
-        data["email"]
-        .fillna("")
-        .astype(str)
-        .str.strip()
-    )
-
-    data["phone"] = (
-        data["phone"]
-        .fillna("")
-        .astype(str)
-        .str.strip()
-    )
+    for column in ["full_name", "email", "phone"]:
+        data[column] = (
+            data[column]
+            .fillna("")
+            .astype(str)
+            .str.strip()
+        )
 
     # Email validation
     data["email_valid"] = data["email"].apply(valid_email)
@@ -152,9 +126,8 @@ def validate_candidates(
     ] += "Invalid email; "
 
     # Phone validation
-    phone_digits = (
-        data["phone"]
-        .str.replace(r"\D", "", regex=True)
+    phone_digits = data["phone"].str.replace(
+        r"\D", "", regex=True
     )
 
     data.loc[
@@ -183,11 +156,8 @@ def validate_candidates(
 
     # Duplicate email validation
     duplicate_email = (
-        data["email"]
-        .str.lower()
-        .duplicated(keep=False)
-        &
-        data["email"].ne("")
+        data["email"].str.lower().duplicated(keep=False)
+        & data["email"].ne("")
     )
 
     data.loc[
@@ -236,23 +206,27 @@ def screen_candidates(
         if term.strip()
     ]
 
-    # Convert experience to numeric values
+    # Convert experience to numeric
     out["experience_years"] = pd.to_numeric(
         out["experience_years"],
         errors="coerce"
     )
 
-    # --------------------------------------------------
-    # EXACT EXPERIENCE MATCH
-    # --------------------------------------------------
+    # Exact experience matching.
+    # IMPORTANT: Keep this as a local variable.
+    # Do not add experience_match as a DataFrame column,
+    # because the existing SQLite table may not contain it.
 
     if min_experience <= 0:
 
-        out["experience_match"] = True
+        experience_match = pd.Series(
+            True,
+            index=out.index
+        )
 
     else:
 
-        out["experience_match"] = (
+        experience_match = (
             out["experience_years"] == float(min_experience)
         )
 
@@ -272,9 +246,7 @@ def screen_candidates(
             for skill in skills
         )
 
-        return (
-            100.0 * matched_skills / len(skills)
-        )
+        return 100.0 * matched_skills / len(skills)
 
     # --------------------------------------------------
     # EXPERIENCE SCORE - 30%
@@ -322,12 +294,7 @@ def screen_candidates(
             return 0.0
 
         if max_notice_days <= 0:
-
-            return (
-                100.0
-                if float(value) <= 0
-                else 0.0
-            )
+            return 100.0 if float(value) <= 0 else 0.0
 
         return (
             100.0
@@ -358,12 +325,9 @@ def screen_candidates(
 
     out["match_score"] = (
         out["skill_score"] * 0.40
-        +
-        out["experience_score"] * 0.30
-        +
-        out["education_score"] * 0.15
-        +
-        out["notice_score"] * 0.15
+        + out["experience_score"] * 0.30
+        + out["education_score"] * 0.15
+        + out["notice_score"] * 0.15
     ).round(1)
 
     # --------------------------------------------------
@@ -371,17 +335,17 @@ def screen_candidates(
     # Exact experience AND threshold are compulsory
     # --------------------------------------------------
 
-    out["screening_recommendation"] = out.apply(
-        lambda row: (
+    out["screening_recommendation"] = [
+        (
             "Meets review threshold"
-            if (
-                row["experience_match"]
-                and row["match_score"] >= threshold
-            )
+            if matched and score >= threshold
             else "Below review threshold"
-        ),
-        axis=1
-    )
+        )
+        for matched, score in zip(
+            experience_match,
+            out["match_score"]
+        )
+    ]
 
     # HR must review every recommendation
     out["hr_review_status"] = "Pending HR review"
@@ -462,7 +426,6 @@ def parse_resume_text(
             and not re.search(r"\d", line)
             and 1 < len(line.split()) <= 4
         ):
-
             name = line[:100]
             break
 
@@ -499,8 +462,7 @@ def parse_resume_text(
 
     return {
         "candidate_id": (
-            "PDF-"
-            + re.sub(r"\W+", "", filename)[:18]
+            "PDF-" + re.sub(r"\W+", "", filename)[:18]
         ),
         "full_name": name or Path(filename).stem,
         "email": emails[0] if emails else "",
