@@ -1,16 +1,27 @@
+
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102747">
   <title>DIT | HR Recruitment Intelligence</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
   <aside class="sidebar">
-    <div class="brand"><img src="assets/dit-logo.png" alt="DIT logo"><div><b>HR RECRUITMENT</b><small>INTELLIGENCE PORTAL</small></div></div>
+    <div class="brand">
+      <img src="assets/dit-logo.png" alt="DIT logo">
+      <div>
+        <b>HR RECRUITMENT</b>
+        <small>INTELLIGENCE PORTAL</small>
+      </div>
+    </div>
+
     <div class="side-label">WORKSPACE</div>
+
     <button class="nav active" data-view="overview">▦ <span>Overview</span></button>
     <button class="nav" data-view="screening">♙ <span>Candidate Screening</span></button>
     <button class="nav" data-view="matched">✓ <span>Matched Candidates</span></button>
@@ -18,46 +29,492 @@
     <button class="nav" data-view="exceptions">! <span>Data Exceptions</span></button>
     <button class="nav" data-view="candidates">☷ <span>Candidate Directory</span></button>
     <button class="nav" data-view="reports">▤ <span>Reports & Export</span></button>
-    <div class="side-foot"><span class="status-dot"></span> Recruitment workspace <small>DIT-P01 · DIT Internship 2026</small></div>
+
+    <div class="side-foot">
+      <span class="status-dot"></span>
+      Recruitment workspace
+      <small>DIT-P01 · DIT Internship 2026</small>
+    </div>
   </aside>
+
   <main class="main">
-    <header class="topbar"><div><span class="eyebrow">DEFINE INFOTECH · DIT-P01</span><h1 id="pageTitle">Recruitment overview</h1><p class="institution">Anjalai Ammal Mahalingam Engineering College</p></div><div class="top-actions"><span class="live"><i></i> SYSTEM ONLINE</span><button class="btn ghost" id="refreshBtn">↻ Refresh</button></div></header>
+
+    <header class="topbar">
+      <div>
+        <span class="eyebrow">DEFINE INFOTECH · DIT-P01</span>
+        <h1 id="pageTitle">Recruitment overview</h1>
+        <p class="institution">Anjalai Ammal Mahalingam Engineering College</p>
+      </div>
+      <div class="top-actions">
+        <span class="live"><i></i> SYSTEM ONLINE</span>
+        <button class="btn ghost" id="refreshBtn">↻ Refresh</button>
+      </div>
+    </header>
+
+    <!-- OVERVIEW -->
     <section class="view active" id="overview">
-      <div class="hero"><div><span class="hero-kicker">SMARTER RECRUITMENT. CLEARER DECISIONS.</span><h2>HR Recruitment<br><em>Automation System</em></h2><p>Validate candidate data, review job-fit indicators and manage recruitment activity in one workspace.</p><button class="btn white" data-go="screening">Start screening <b>→</b></button></div><div class="hero-art"><div class="orbit o1"></div><div class="orbit o2"></div><div class="hero-icon">♙</div><div class="float-card fc1">✓ <span>Data validation</span></div><div class="float-card fc2">◎ <span>Job-fit insights</span></div></div></div>
-      <div class="section-head"><div><span class="eyebrow">AT A GLANCE</span><h2>Recruitment analytics</h2></div><span class="muted" id="lastUpdated">Waiting for data</span></div>
+
+      <div class="hero">
+        <div>
+          <span class="hero-kicker">SMARTER RECRUITMENT. CLEARER DECISIONS.</span>
+          <h2>HR Recruitment<br><em>Automation System</em></h2>
+          <p>Validate candidate data, review job-fit indicators and manage recruitment activity in one workspace.</p>
+          <button class="btn white" data-go="screening">
+            Start screening <b>→</b>
+          </button>
+        </div>
+
+        <div class="hero-art">
+          <div class="orbit o1"></div>
+          <div class="orbit o2"></div>
+          <div class="hero-icon">♙</div>
+          <div class="float-card fc1">✓ <span>Data validation</span></div>
+          <div class="float-card fc2">◎ <span>Job-fit insights</span></div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">AT A GLANCE</span>
+          <h2>Recruitment analytics</h2>
+        </div>
+        <span class="muted" id="lastUpdated">Waiting for data</span>
+      </div>
+
       <div class="metrics">
-        <article class="metric"><div class="metric-icon blue">♙</div><span>Total candidates</span><strong id="mTotal">0</strong><small>Processed candidate records</small></article>
-        <article class="metric"><div class="metric-icon green">✓</div><span>Valid candidates</span><strong id="mValid">0</strong><small>Passed data validation</small></article>
-        <article class="metric"><div class="metric-icon amber">◈</div><span>Average match score</span><strong id="mScore">0%</strong><small>Job criteria alignment</small></article>
-        <article class="metric"><div class="metric-icon violet">▤</div><span>Needs HR review</span><strong id="mPending">0</strong><small>Human review is required</small></article>
+        <article class="metric">
+          <div class="metric-icon blue">♙</div>
+          <span>Total candidates</span>
+          <strong id="mTotal">0</strong>
+          <small>Processed candidate records</small>
+        </article>
+
+        <article class="metric">
+          <div class="metric-icon green">✓</div>
+          <span>Valid candidates</span>
+          <strong id="mValid">0</strong>
+          <small>Passed data validation</small>
+        </article>
+
+        <article class="metric">
+          <div class="metric-icon amber">◈</div>
+          <span>Average match score</span>
+          <strong id="mScore">0%</strong>
+          <small>Job criteria alignment</small>
+        </article>
+
+        <article class="metric">
+          <div class="metric-icon violet">▤</div>
+          <span>Needs HR review</span>
+          <strong id="mPending">0</strong>
+          <small>Human review is required</small>
+        </article>
       </div>
-      <div class="dashboard-grid"><article class="panel chart-panel"><div class="panel-title"><div><span class="eyebrow">PERFORMANCE</span><h3>Match score distribution</h3></div><span class="tag">All screenings</span></div><canvas id="scoreChart"></canvas><div id="chartEmpty" class="empty-note">Process a candidate file to populate analytics.</div></article>
-      <article class="panel"><div class="panel-title"><div><span class="eyebrow">PIPELINE</span><h3>HR review status</h3></div></div><div id="pipeline" class="pipeline"><div class="empty-note">No review activity yet.</div></div></article></div>
-      <article class="panel table-panel"><div class="panel-title"><div><span class="eyebrow">LATEST ACTIVITY</span><h3>Recent candidates</h3></div><button class="text-btn" data-go="candidates">View directory →</button></div><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Role</th><th>Match score</th><th>Recommendation</th><th>HR status</th></tr></thead><tbody id="recentRows"><tr><td colspan="5" class="empty-note">No candidate records yet.</td></tr></tbody></table></div></article>
+
+      <div class="dashboard-grid">
+        <article class="panel chart-panel">
+          <div class="panel-title">
+            <div>
+              <span class="eyebrow">PERFORMANCE</span>
+              <h3>Match score distribution</h3>
+            </div>
+            <span class="tag">All screenings</span>
+          </div>
+          <canvas id="scoreChart"></canvas>
+          <div id="chartEmpty" class="empty-note">
+            Process a candidate file to populate analytics.
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <div>
+              <span class="eyebrow">PIPELINE</span>
+              <h3>HR review status</h3>
+            </div>
+          </div>
+          <div id="pipeline" class="pipeline">
+            <div class="empty-note">No review activity yet.</div>
+          </div>
+        </article>
+      </div>
+
+      <article class="panel table-panel">
+        <div class="panel-title">
+          <div>
+            <span class="eyebrow">LATEST ACTIVITY</span>
+            <h3>Recent candidates</h3>
+          </div>
+          <button class="text-btn" data-go="candidates">View directory →</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Role</th>
+                <th>Match score</th>
+                <th>Recommendation</th>
+                <th>HR status</th>
+              </tr>
+            </thead>
+            <tbody id="recentRows">
+              <tr>
+                <td colspan="5" class="empty-note">No candidate records yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
     </section>
+
+    <!-- CANDIDATE SCREENING -->
     <section class="view" id="screening">
-      <div class="section-head"><div><span class="eyebrow">CANDIDATE INTAKE</span><h2>Screen candidates</h2><p class="muted">Upload a candidate spreadsheet and/or text-based PDF resumes.</p></div></div>
-      <div class="screen-grid">
-        <article class="panel form-panel"><h3>01 · Job requirements</h3><div class="form-grid">
-          <label>Job role<input id="role" value="Python Developer"></label>
-          <label>Required skills<input id="skills" value="Python, SQL" placeholder="Python, SQL, Excel"></label>
-          <label>Minimum experience (years)<input id="experience" type="number" min="0" max="50" step=".5" value="2"></label>
-          <label>Accepted education keywords<input id="education" value="Bachelor, Master, Diploma"></label>
-          <label>Maximum notice period (days)<input id="notice" type="number" min="0" max="365" value="60"></label>
-          <label>Match threshold (%)<input id="threshold" type="number" min="0" max="100" value="60"></label>
-        </div><button class="btn ghost full" id="applyRequirements">↻ Apply updated requirements to current dataset</button><p class="fineprint">Changing job requirements re-screens the currently uploaded dataset. You do not need to upload the file again.</p><div class="weights"><b>Transparent score weighting</b><span>Skills 40%</span><span>Experience 30%</span><span>Education 15%</span><span>Notice 15%</span></div></article>
-        <article class="panel upload-panel"><h3>02 · Upload candidate files</h3><label class="dropzone" for="candidateFile"><span class="upload-symbol">↑</span><b>Candidate data sheet</b><small>Choose CSV or Excel (.csv, .xlsx)</small><input id="candidateFile" type="file" accept=".csv,.xlsx"></label><label class="dropzone" for="resumeFiles"><span class="upload-symbol">▧</span><b>PDF resumes</b><small>Choose one or multiple text-based PDFs</small><input id="resumeFiles" type="file" accept=".pdf" multiple></label><div class="file-names" id="fileNames">No files selected</div><button class="btn primary full" id="processBtn">Process candidates <b>→</b></button><p class="fineprint">Use synthetic or authorized candidate data only. Scanned PDFs need OCR. Extracted resume details must be verified by HR.</p></article>
+
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">CANDIDATE INTAKE</span>
+          <h2>Screen candidates</h2>
+          <p class="muted">Upload a candidate spreadsheet in CSV or Excel format.</p>
+        </div>
       </div>
+
+      <div class="screen-grid">
+
+        <!-- JOB REQUIREMENTS -->
+        <article class="panel form-panel">
+          <h3>01 · Job requirements</h3>
+
+          <div class="form-grid">
+            <label>
+              Job role
+              <input id="role" value="Python Developer">
+            </label>
+
+            <label>
+              Required skills
+              <input id="skills" value="Python, SQL" placeholder="Python, SQL, Excel">
+            </label>
+
+            <label>
+              Minimum experience (years)
+              <input id="experience" type="number" min="0" max="50" step=".5" value="2">
+            </label>
+
+            <label>
+              Accepted education keywords
+              <input id="education" value="Bachelor, Master, Diploma">
+            </label>
+
+            <label>
+              Maximum notice period (days)
+              <input id="notice" type="number" min="0" max="365" value="60">
+            </label>
+
+            <label>
+              Match threshold (%)
+              <input id="threshold" type="number" min="0" max="100" value="60">
+            </label>
+          </div>
+
+          <button class="btn ghost full" id="applyRequirements">
+            ↻ Apply updated requirements to current dataset
+          </button>
+
+          <p class="fineprint">
+            Changing job requirements re-screens the currently uploaded dataset.
+            You do not need to upload the file again.
+          </p>
+
+          <div class="weights">
+            <b>Transparent score weighting</b>
+            <span>Skills 40%</span>
+            <span>Experience 30%</span>
+            <span>Education 15%</span>
+            <span>Notice 15%</span>
+          </div>
+        </article>
+
+        <!-- CSV AND EXCEL UPLOAD ONLY -->
+        <article class="panel upload-panel">
+          <h3>02 · Upload candidate files</h3>
+
+          <label class="dropzone" for="candidateFile">
+            <span class="upload-symbol">↑</span>
+            <b>Candidate data sheet</b>
+            <small>Choose CSV or Excel (.csv, .xlsx)</small>
+            <input
+              id="candidateFile"
+              type="file"
+              accept=".csv,.xlsx"
+            >
+          </label>
+
+          <div class="file-names" id="fileNames">
+            No files selected
+          </div>
+
+          <button class="btn primary full" id="processBtn">
+            Process candidates <b>→</b>
+          </button>
+
+          <p class="fineprint">
+            Use synthetic or authorized candidate data only.
+            Verify candidate information before making recruitment decisions.
+          </p>
+        </article>
+
+      </div>
+
       <div id="screeningMessage" class="message hidden"></div>
-      <article class="panel results-panel" id="resultsPanel"><div class="panel-title"><div><span class="eyebrow">SCREENING OUTPUT</span><h3>Processing results</h3></div><button class="btn ghost" id="downloadExcel">Export CSV ↓</button></div><div class="metrics compact"><article class="metric"><span>Uploaded rows</span><strong id="rTotal">0</strong></article><article class="metric"><span>Valid</span><strong id="rValid">0</strong></article><article class="metric"><span>Exceptions</span><strong id="rExceptions">0</strong></article><article class="metric"><span>Above threshold</span><strong id="rAbove">0</strong></article></div><div class="empty-note">Screening output is separated into Matched Candidates, Rejected Candidates and Data Exceptions. Use the navigation on the left to view each group.</div><div class="result-links"><button class="btn primary" data-go="matched">View matched candidates →</button><button class="btn ghost" data-go="rejected">View rejected candidates →</button></div></article>
+
+      <article class="panel results-panel" id="resultsPanel">
+        <div class="panel-title">
+          <div>
+            <span class="eyebrow">SCREENING OUTPUT</span>
+            <h3>Processing results</h3>
+          </div>
+          <button class="btn ghost" id="downloadExcel">Export CSV ↓</button>
+        </div>
+
+        <div class="metrics compact">
+          <article class="metric">
+            <span>Uploaded rows</span>
+            <strong id="rTotal">0</strong>
+          </article>
+          <article class="metric">
+            <span>Valid</span>
+            <strong id="rValid">0</strong>
+          </article>
+          <article class="metric">
+            <span>Exceptions</span>
+            <strong id="rExceptions">0</strong>
+          </article>
+          <article class="metric">
+            <span>Above threshold</span>
+            <strong id="rAbove">0</strong>
+          </article>
+        </div>
+
+        <div class="empty-note">
+          Screening output is separated into Matched Candidates,
+          Rejected Candidates and Data Exceptions.
+          Use the navigation on the left to view each group.
+        </div>
+
+        <div class="result-links">
+          <button class="btn primary" data-go="matched">
+            View matched candidates →
+          </button>
+          <button class="btn ghost" data-go="rejected">
+            View rejected candidates →
+          </button>
+        </div>
+      </article>
     </section>
-    <section class="view" id="matched"><div class="section-head"><div><span class="eyebrow">SCREENING DECISION SUPPORT</span><h2>Matched candidates</h2><p class="muted">Only candidates meeting the current match threshold are shown here.</p></div><strong class="count-label" id="matchedCount">0 matched</strong></div><article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Email</th><th>Experience</th><th>Match</th><th>HR review</th></tr></thead><tbody id="matchedRows"><tr><td colspan="5" class="empty-note">No matched candidates.</td></tr></tbody></table></div></article></section>
-    <section class="view" id="rejected"><div class="section-head"><div><span class="eyebrow">SCREENING DECISION SUPPORT</span><h2>Rejected candidates</h2><p class="muted">Only valid candidates below the current match threshold are shown here.</p></div><strong class="count-label" id="rejectedCount">0 rejected</strong></div><article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Email</th><th>Experience</th><th>Match</th><th>Reason</th><th>HR review</th></tr></thead><tbody id="rejectedRows"><tr><td colspan="6" class="empty-note">No rejected candidates.</td></tr></tbody></table></div></article></section>
-    <section class="view" id="exceptions"><div class="section-head"><div><span class="eyebrow">DATA QUALITY</span><h2>Data exceptions</h2><p class="muted">Rows excluded from screening because required data is missing or invalid.</p></div><strong class="count-label" id="exceptionCount">0 exceptions</strong></div><article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Candidate ID</th><th>Name</th><th>Email</th><th>Validation issue</th></tr></thead><tbody id="exceptionRows"><tr><td colspan="4" class="empty-note">No data exceptions.</td></tr></tbody></table></div></article></section>
-    <section class="view" id="candidates"><div class="section-head"><div><span class="eyebrow">TALENT DATABASE</span><h2>Candidate directory</h2><p class="muted">Search candidates in the currently uploaded dataset.</p></div><input class="search" id="candidateSearch" placeholder="Search name, email or role…"></div><article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Candidate ID</th><th>Name</th><th>Email</th><th>Role</th><th>Experience</th><th>Match</th><th>HR status</th></tr></thead><tbody id="directoryRows"><tr><td colspan="7" class="empty-note">No candidate records available.</td></tr></tbody></table></div></article></section>
-    <section class="view" id="reports"><div class="section-head"><div><span class="eyebrow">EXPORT CENTRE</span><h2>Reports & exports</h2><p class="muted">Download reports for the currently active dataset.</p></div></div><div class="report-cards"><article class="panel"><div class="metric-icon blue">▤</div><h3>Candidate screening report</h3><p>Download candidate records, match scores and HR review statuses in CSV format.</p><button class="btn primary" id="reportCsv">Download candidate CSV ↓</button></article><article class="panel"><div class="metric-icon green">✓</div><h3>Data exceptions report</h3><p>Review records that did not pass required-field and contact validation.</p><button class="btn ghost" id="reportExceptions">Download exceptions CSV ↓</button></article></div><div class="panel notice"><b>Responsible use</b><p>Match scores are explainable decision-support indicators, not hiring decisions. HR must verify candidate information and make all interview and hiring decisions. Do not use protected characteristics or proxies.</p></div></section>
-    <footer>© 2026 Define Infotech · HR Recruitment Automation System <span>DIT-P01 · Anjalai Ammal Mahalingam Engineering College</span></footer>
+
+    <!-- MATCHED CANDIDATES -->
+    <section class="view" id="matched">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">SCREENING DECISION SUPPORT</span>
+          <h2>Matched candidates</h2>
+          <p class="muted">
+            Only candidates meeting the current match threshold are shown here.
+          </p>
+        </div>
+        <strong class="count-label" id="matchedCount">0 matched</strong>
+      </div>
+
+      <article class="panel table-panel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Email</th>
+                <th>Experience</th>
+                <th>Match</th>
+                <th>HR review</th>
+              </tr>
+            </thead>
+            <tbody id="matchedRows">
+              <tr>
+                <td colspan="5" class="empty-note">No matched candidates.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- REJECTED CANDIDATES -->
+    <section class="view" id="rejected">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">SCREENING DECISION SUPPORT</span>
+          <h2>Rejected candidates</h2>
+          <p class="muted">
+            Only valid candidates below the current match threshold are shown here.
+          </p>
+        </div>
+        <strong class="count-label" id="rejectedCount">0 rejected</strong>
+      </div>
+
+      <article class="panel table-panel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Candidate</th>
+                <th>Email</th>
+                <th>Experience</th>
+                <th>Match</th>
+                <th>Reason</th>
+                <th>HR review</th>
+              </tr>
+            </thead>
+            <tbody id="rejectedRows">
+              <tr>
+                <td colspan="6" class="empty-note">No rejected candidates.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- DATA EXCEPTIONS -->
+    <section class="view" id="exceptions">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">DATA QUALITY</span>
+          <h2>Data exceptions</h2>
+          <p class="muted">
+            Rows excluded from screening because required data is missing or invalid.
+          </p>
+        </div>
+        <strong class="count-label" id="exceptionCount">0 exceptions</strong>
+      </div>
+
+      <article class="panel table-panel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Candidate ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Validation issue</th>
+              </tr>
+            </thead>
+            <tbody id="exceptionRows">
+              <tr>
+                <td colspan="4" class="empty-note">No data exceptions.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- CANDIDATE DIRECTORY -->
+    <section class="view" id="candidates">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">TALENT DATABASE</span>
+          <h2>Candidate directory</h2>
+          <p class="muted">
+            Search candidates in the currently uploaded dataset.
+          </p>
+        </div>
+        <input
+          class="search"
+          id="candidateSearch"
+          placeholder="Search name, email or role…"
+        >
+      </div>
+
+      <article class="panel table-panel">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Candidate ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Experience</th>
+                <th>Match</th>
+                <th>HR status</th>
+              </tr>
+            </thead>
+            <tbody id="directoryRows">
+              <tr>
+                <td colspan="7" class="empty-note">No candidate records available.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="view" id="reports">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">EXPORT CENTRE</span>
+          <h2>Reports & exports</h2>
+          <p class="muted">
+            Download reports for the currently active dataset.
+          </p>
+        </div>
+      </div>
+
+      <div class="report-cards">
+        <article class="panel">
+          <div class="metric-icon blue">▤</div>
+          <h3>Candidate screening report</h3>
+          <p>
+            Download candidate records, match scores and HR review statuses
+            in CSV format.
+          </p>
+          <button class="btn primary" id="reportCsv">
+            Download candidate CSV ↓
+          </button>
+        </article>
+
+        <article class="panel">
+          <div class="metric-icon green">✓</div>
+          <h3>Data exceptions report</h3>
+          <p>
+            Review records that did not pass required-field and contact validation.
+          </p>
+          <button class="btn ghost" id="reportExceptions">
+            Download exceptions CSV ↓
+          </button>
+        </article>
+      </div>
+
+      <div class="panel notice">
+        <b>Responsible use</b>
+        <p>
+          Match scores are explainable decision-support indicators, not hiring
+          decisions. HR must verify candidate information and make all interview
+          and hiring decisions. Do not use protected characteristics or proxies.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      © 2026 Define Infotech · HR Recruitment Automation System
+      <span>DIT-P01 · Anjalai Ammal Mahalingam Engineering College</span>
+    </footer>
+
   </main>
+
   <div id="toast" class="toast"></div>
+
   <script src="app.js"></script>
-</body></html>
+</body>
+</html>
