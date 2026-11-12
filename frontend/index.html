@@ -21,7 +21,6 @@
     </div>
 
     <div class="side-label">WORKSPACE</div>
-
     <button class="nav active" data-view="overview">▦ <span>Overview</span></button>
     <button class="nav" data-view="screening">♙ <span>Candidate Screening</span></button>
     <button class="nav" data-view="matched">✓ <span>Matched Candidates</span></button>
@@ -38,7 +37,6 @@
   </aside>
 
   <main class="main">
-
     <header class="topbar">
       <div>
         <span class="eyebrow">DEFINE INFOTECH · DIT-P01</span>
@@ -53,7 +51,6 @@
 
     <!-- OVERVIEW -->
     <section class="view active" id="overview">
-
       <div class="hero">
         <div>
           <span class="hero-kicker">SMARTER RECRUITMENT. CLEARER DECISIONS.</span>
@@ -94,6 +91,16 @@
           <span>Valid candidates</span>
           <strong id="mValid">0</strong>
           <small>Passed data validation</small>
+        </article>
+
+        <!-- NEW EXACT EXPERIENCE CARD -->
+        <article class="metric">
+          <div class="metric-icon violet">◎</div>
+          <span>Exact experience candidates</span>
+          <strong id="mExact">0</strong>
+          <small id="mExperienceRequirement">
+            Candidates matching required experience
+          </small>
         </article>
 
         <article class="metric">
@@ -170,7 +177,6 @@
 
     <!-- CANDIDATE SCREENING -->
     <section class="view" id="screening">
-
       <div class="section-head">
         <div>
           <span class="eyebrow">CANDIDATE INTAKE</span>
@@ -180,8 +186,6 @@
       </div>
 
       <div class="screen-grid">
-
-        <!-- JOB REQUIREMENTS -->
         <article class="panel form-panel">
           <h3>01 · Job requirements</h3>
 
@@ -197,7 +201,7 @@
             </label>
 
             <label>
-               Experience (years)
+              Experience (years)
               <input id="experience" type="number" min="0" max="50" step=".5" value="2">
             </label>
 
@@ -235,7 +239,6 @@
           </div>
         </article>
 
-        <!-- CSV AND EXCEL UPLOAD ONLY -->
         <article class="panel upload-panel">
           <h3>02 · Upload files</h3>
 
@@ -243,16 +246,10 @@
             <span class="upload-symbol">↑</span>
             <b>Candidate data sheet</b>
             <small>Choose CSV or Excel (.csv, .xlsx)</small>
-            <input
-              id="candidateFile"
-              type="file"
-              accept=".csv,.xlsx"
-            >
+            <input id="candidateFile" type="file" accept=".csv,.xlsx">
           </label>
 
-          <div class="file-names" id="fileNames">
-            No files selected
-          </div>
+          <div class="file-names" id="fileNames">No files selected</div>
 
           <button class="btn primary full" id="processBtn">
             Process candidates <b>→</b>
@@ -263,7 +260,6 @@
             Verify candidate information before making recruitment decisions.
           </p>
         </article>
-
       </div>
 
       <div id="screeningMessage" class="message hidden"></div>
@@ -303,12 +299,8 @@
         </div>
 
         <div class="result-links">
-          <button class="btn primary" data-go="matched">
-            View matched candidates →
-          </button>
-          <button class="btn ghost" data-go="rejected">
-            View rejected candidates →
-          </button>
+          <button class="btn primary" data-go="matched">View matched candidates →</button>
+          <button class="btn ghost" data-go="rejected">View rejected candidates →</button>
         </div>
       </article>
     </section>
@@ -319,9 +311,7 @@
         <div>
           <span class="eyebrow">SCREENING DECISION SUPPORT</span>
           <h2>Matched candidates</h2>
-          <p class="muted">
-            Only candidates meeting the current match threshold are shown here.
-          </p>
+          <p class="muted">Only candidates meeting the current match threshold are shown here.</p>
         </div>
         <strong class="count-label" id="matchedCount">0 matched</strong>
       </div>
@@ -339,9 +329,7 @@
               </tr>
             </thead>
             <tbody id="matchedRows">
-              <tr>
-                <td colspan="5" class="empty-note">No matched candidates.</td>
-              </tr>
+              <tr><td colspan="5" class="empty-note">No matched candidates.</td></tr>
             </tbody>
           </table>
         </div>
@@ -354,9 +342,7 @@
         <div>
           <span class="eyebrow">SCREENING DECISION SUPPORT</span>
           <h2>Rejected candidates</h2>
-          <p class="muted">
-            Only valid candidates below the current match threshold are shown here.
-          </p>
+          <p class="muted">Only valid candidates below the current match threshold are shown here.</p>
         </div>
         <strong class="count-label" id="rejectedCount">0 rejected</strong>
       </div>
@@ -375,9 +361,7 @@
               </tr>
             </thead>
             <tbody id="rejectedRows">
-              <tr>
-                <td colspan="6" class="empty-note">No rejected candidates.</td>
-              </tr>
+              <tr><td colspan="6" class="empty-note">No rejected candidates.</td></tr>
             </tbody>
           </table>
         </div>
@@ -390,9 +374,7 @@
         <div>
           <span class="eyebrow">DATA QUALITY</span>
           <h2>Data exceptions</h2>
-          <p class="muted">
-            Rows excluded from screening because required data is missing or invalid.
-          </p>
+          <p class="muted">Rows excluded from screening because required data is missing or invalid.</p>
         </div>
         <strong class="count-label" id="exceptionCount">0 exceptions</strong>
       </div>
@@ -409,9 +391,7 @@
               </tr>
             </thead>
             <tbody id="exceptionRows">
-              <tr>
-                <td colspan="4" class="empty-note">No data exceptions.</td>
-              </tr>
+              <tr><td colspan="4" class="empty-note">No data exceptions.</td></tr>
             </tbody>
           </table>
         </div>
@@ -424,15 +404,9 @@
         <div>
           <span class="eyebrow">TALENT DATABASE</span>
           <h2>Candidate directory</h2>
-          <p class="muted">
-            Search candidates in the currently uploaded dataset.
-          </p>
+          <p class="muted">Search candidates in the currently uploaded dataset.</p>
         </div>
-        <input
-          class="search"
-          id="candidateSearch"
-          placeholder="Search name, email or role…"
-        >
+        <input class="search" id="candidateSearch" placeholder="Search name, email or role…">
       </div>
 
       <article class="panel table-panel">
@@ -450,9 +424,7 @@
               </tr>
             </thead>
             <tbody id="directoryRows">
-              <tr>
-                <td colspan="7" class="empty-note">No candidate records available.</td>
-              </tr>
+              <tr><td colspan="7" class="empty-note">No candidate records available.</td></tr>
             </tbody>
           </table>
         </div>
@@ -465,9 +437,7 @@
         <div>
           <span class="eyebrow">EXPORT CENTRE</span>
           <h2>Reports & exports</h2>
-          <p class="muted">
-            Download reports for the currently active dataset.
-          </p>
+          <p class="muted">Download reports for the currently active dataset.</p>
         </div>
       </div>
 
@@ -475,24 +445,15 @@
         <article class="panel">
           <div class="metric-icon blue">▤</div>
           <h3>Candidate screening report</h3>
-          <p>
-            Download candidate records, match scores and HR review statuses
-            in CSV format.
-          </p>
-          <button class="btn primary" id="reportCsv">
-            Download candidate CSV ↓
-          </button>
+          <p>Download candidate records, match scores and HR review statuses in CSV format.</p>
+          <button class="btn primary" id="reportCsv">Download candidate CSV ↓</button>
         </article>
 
         <article class="panel">
           <div class="metric-icon green">✓</div>
           <h3>Data exceptions report</h3>
-          <p>
-            Review records that did not pass required-field and contact validation.
-          </p>
-          <button class="btn ghost" id="reportExceptions">
-            Download exceptions CSV ↓
-          </button>
+          <p>Review records that did not pass required-field and contact validation.</p>
+          <button class="btn ghost" id="reportExceptions">Download exceptions CSV ↓</button>
         </article>
       </div>
 
@@ -510,11 +471,9 @@
       © 2026 Define Infotech · HR Recruitment Automation System
       <span>DIT-P01 · Anjalai Ammal Mahalingam Engineering College</span>
     </footer>
-
   </main>
 
   <div id="toast" class="toast"></div>
-
   <script src="app.js"></script>
 </body>
 </html>
