@@ -30,7 +30,6 @@ const rejected = () =>
 // --------------------------------------------------
 
 function toast(msg) {
-
   const t = $("toast");
 
   if (!t) return;
@@ -49,7 +48,6 @@ function toast(msg) {
 // --------------------------------------------------
 
 function setView(view) {
-
   document.querySelectorAll(".view").forEach(x =>
     x.classList.toggle("active", x.id === view)
   );
@@ -68,8 +66,10 @@ function setView(view) {
     reports: "Reports & exports"
   };
 
-  $("pageTitle").textContent =
-    titles[view] || "Recruitment overview";
+  if ($("pageTitle")) {
+    $("pageTitle").textContent =
+      titles[view] || "Recruitment overview";
+  }
 
   if (view === "overview") {
     loadDashboard();
@@ -84,13 +84,11 @@ function setView(view) {
   }
 }
 
-
 document.querySelectorAll(".nav").forEach(b =>
   b.addEventListener("click", () =>
     setView(b.dataset.view)
   )
 );
-
 
 document.querySelectorAll("[data-go]").forEach(b =>
   b.addEventListener("click", () =>
@@ -103,24 +101,25 @@ document.querySelectorAll("[data-go]").forEach(b =>
 // DASHBOARD REFRESH
 // --------------------------------------------------
 
-$("refreshBtn").addEventListener("click", async () => {
+if ($("refreshBtn")) {
+  $("refreshBtn").addEventListener("click", async () => {
+    const b = $("refreshBtn");
 
-  const b = $("refreshBtn");
+    b.disabled = true;
+    b.textContent = "↻ Refreshing…";
 
-  b.disabled = true;
-  b.textContent = "↻ Refreshing…";
+    const ok = await loadDashboard();
 
-  const ok = await loadDashboard();
+    b.disabled = false;
+    b.textContent = "↻ Refresh";
 
-  b.disabled = false;
-  b.textContent = "↻ Refresh";
-
-  toast(
-    ok
-      ? "Dashboard refreshed"
-      : "Could not refresh dashboard"
-  );
-});
+    toast(
+      ok
+        ? "Dashboard refreshed"
+        : "Could not refresh dashboard"
+    );
+  });
+}
 
 
 // --------------------------------------------------
@@ -128,11 +127,10 @@ $("refreshBtn").addEventListener("click", async () => {
 // --------------------------------------------------
 
 function message(text, type = "success") {
+  if (!$("screeningMessage")) return;
 
   $("screeningMessage").textContent = text;
-
-  $("screeningMessage").className =
-    `message ${type}`;
+  $("screeningMessage").className = `message ${type}`;
 }
 
 
@@ -141,7 +139,6 @@ function message(text, type = "success") {
 // --------------------------------------------------
 
 function esc(s) {
-
   return String(s ?? "").replace(/[&<>"']/g, c => ({
     "&": "&amp;",
     "<": "&lt;",
@@ -157,7 +154,6 @@ function esc(s) {
 // --------------------------------------------------
 
 function statusSelect(c) {
-
   const status =
     c.hr_review_status || "Pending HR review";
 
@@ -199,39 +195,41 @@ function statusSelect(c) {
 // --------------------------------------------------
 
 function renderResults() {
+  if ($("recentRows")) {
+    $("recentRows").innerHTML =
+      matched().slice(0, 5).map(c => `
+        <tr>
+          <td>${esc(c.full_name)}</td>
+          <td>${esc(c.applied_role)}</td>
+          <td>${Number(c.match_score).toFixed(1)}%</td>
+          <td>${esc(c.screening_recommendation)}</td>
+          <td>${esc(c.hr_review_status)}</td>
+        </tr>
+      `).join("") || `
+        <tr>
+          <td colspan="5" class="empty-note">
+            No matched candidates yet.
+          </td>
+        </tr>
+      `;
+  }
 
-  $("recentRows").innerHTML =
-    matched().slice(0, 5).map(c => `
+  if ($("rTotal")) {
+    $("rTotal").textContent =
+      candidates.length + exceptions.length;
+  }
 
-      <tr>
-        <td>${esc(c.full_name)}</td>
-        <td>${esc(c.applied_role)}</td>
-        <td>${Number(c.match_score).toFixed(1)}%</td>
-        <td>${esc(c.screening_recommendation)}</td>
-        <td>${esc(c.hr_review_status)}</td>
-      </tr>
+  if ($("rValid")) {
+    $("rValid").textContent = candidates.length;
+  }
 
-    `).join("") || `
+  if ($("rExceptions")) {
+    $("rExceptions").textContent = exceptions.length;
+  }
 
-      <tr>
-        <td colspan="5" class="empty-note">
-          No matched candidates yet.
-        </td>
-      </tr>
-
-    `;
-
-  $("rTotal").textContent =
-    candidates.length + exceptions.length;
-
-  $("rValid").textContent =
-    candidates.length;
-
-  $("rExceptions").textContent =
-    exceptions.length;
-
-  $("rAbove").textContent =
-    matched().length;
+  if ($("rAbove")) {
+    $("rAbove").textContent = matched().length;
+  }
 
   renderSeparatedViews();
 }
@@ -242,11 +240,9 @@ function renderResults() {
 // --------------------------------------------------
 
 function updateExperienceCount(count, years) {
-
   const displayYears = Number(years);
 
   ["rValid", "mValid"].forEach(id => {
-
     const target = $(id);
 
     if (!target) return;
@@ -254,7 +250,6 @@ function updateExperienceCount(count, years) {
     let note = $(id + "ExperienceNote");
 
     if (!note) {
-
       note = document.createElement("small");
 
       note.id = id + "ExperienceNote";
@@ -263,15 +258,11 @@ function updateExperienceCount(count, years) {
       note.style.fontSize = "12px";
       note.style.color = "#26734d";
 
-      target.insertAdjacentElement(
-        "afterend",
-        note
-      );
+      target.insertAdjacentElement("afterend", note);
     }
 
     note.textContent =
       `Exact ${displayYears}-year matches: ${count}`;
-
   });
 }
 
@@ -281,114 +272,113 @@ function updateExperienceCount(count, years) {
 // --------------------------------------------------
 
 function renderSeparatedViews() {
-
   const yes = matched();
   const no = rejected();
 
-  $("matchedCount").textContent =
-    `${yes.length} matched`;
+  if ($("matchedCount")) {
+    $("matchedCount").textContent =
+      `${yes.length} matched`;
+  }
 
-  $("rejectedCount").textContent =
-    `${no.length} rejected`;
+  if ($("rejectedCount")) {
+    $("rejectedCount").textContent =
+      `${no.length} rejected`;
+  }
 
-  $("exceptionCount").textContent =
-    `${exceptions.length} exceptions`;
+  if ($("exceptionCount")) {
+    $("exceptionCount").textContent =
+      `${exceptions.length} exceptions`;
+  }
 
 
   // MATCHED CANDIDATES
 
-  $("matchedRows").innerHTML =
-    yes.map(c => `
+  if ($("matchedRows")) {
+    $("matchedRows").innerHTML =
+      yes.map(c => `
+        <tr>
+          <td>
+            <b>${esc(c.full_name)}</b>
+            <br>
+            <small>${esc(c.candidate_id)}</small>
+          </td>
 
-      <tr>
-        <td>
-          <b>${esc(c.full_name)}</b>
-          <br>
-          <small>${esc(c.candidate_id)}</small>
-        </td>
+          <td>${esc(c.email)}</td>
 
-        <td>${esc(c.email)}</td>
+          <td>${esc(c.experience_years)} yrs</td>
 
-        <td>${esc(c.experience_years)} yrs</td>
+          <td>
+            <b>${Number(c.match_score).toFixed(1)}%</b>
+          </td>
 
-        <td>
-          <b>${Number(c.match_score).toFixed(1)}%</b>
-        </td>
-
-        <td>${statusSelect(c)}</td>
-      </tr>
-
-    `).join("") || `
-
-      <tr>
-        <td colspan="5" class="empty-note">
-          No matched candidates for the current requirements.
-        </td>
-      </tr>
-
-    `;
+          <td>${statusSelect(c)}</td>
+        </tr>
+      `).join("") || `
+        <tr>
+          <td colspan="5" class="empty-note">
+            No matched candidates for the current requirements.
+          </td>
+        </tr>
+      `;
+  }
 
 
   // REJECTED CANDIDATES
 
-  $("rejectedRows").innerHTML =
-    no.map(c => `
+  if ($("rejectedRows")) {
+    $("rejectedRows").innerHTML =
+      no.map(c => `
+        <tr>
+          <td>
+            <b>${esc(c.full_name)}</b>
+            <br>
+            <small>${esc(c.candidate_id)}</small>
+          </td>
 
-      <tr>
-        <td>
-          <b>${esc(c.full_name)}</b>
-          <br>
-          <small>${esc(c.candidate_id)}</small>
-        </td>
+          <td>${esc(c.email)}</td>
 
-        <td>${esc(c.email)}</td>
+          <td>${esc(c.experience_years)} yrs</td>
 
-        <td>${esc(c.experience_years)} yrs</td>
+          <td>
+            ${Number(c.match_score).toFixed(1)}%
+          </td>
 
-        <td>
-          ${Number(c.match_score).toFixed(1)}%
-        </td>
+          <td>
+            ${esc(c.screening_recommendation)}
+            (${esc($("threshold")?.value || 60)}% threshold)
+          </td>
 
-        <td>
-          ${esc(c.screening_recommendation)}
-          (${esc($("threshold").value)}% threshold)
-        </td>
-
-        <td>${statusSelect(c)}</td>
-      </tr>
-
-    `).join("") || `
-
-      <tr>
-        <td colspan="6" class="empty-note">
-          No rejected candidates for the current requirements.
-        </td>
-      </tr>
-
-    `;
+          <td>${statusSelect(c)}</td>
+        </tr>
+      `).join("") || `
+        <tr>
+          <td colspan="6" class="empty-note">
+            No rejected candidates for the current requirements.
+          </td>
+        </tr>
+      `;
+  }
 
 
   // DATA EXCEPTIONS
 
-  $("exceptionRows").innerHTML =
-    exceptions.map(c => `
-
-      <tr>
-        <td>${esc(c.candidate_id)}</td>
-        <td>${esc(c.full_name)}</td>
-        <td>${esc(c.email)}</td>
-        <td>${esc(c.validation_issues)}</td>
-      </tr>
-
-    `).join("") || `
-
-      <tr>
-        <td colspan="4" class="empty-note">
-          No data exceptions.
-        </td>
-      </tr>
-
-    `;
+  if ($("exceptionRows")) {
+    $("exceptionRows").innerHTML =
+      exceptions.map(c => `
+        <tr>
+          <td>${esc(c.candidate_id)}</td>
+          <td>${esc(c.full_name)}</td>
+          <td>${esc(c.email)}</td>
+          <td>${esc(c.validation_issues)}</td>
+        </tr>
+      `).join("") || `
+        <tr>
+          <td colspan="4" class="empty-note">
+            No data exceptions.
+          </td>
+        </tr>
+      `;
+  }
 }
 
 
@@ -397,7 +387,6 @@ function renderSeparatedViews() {
 // --------------------------------------------------
 
 async function readResponse(r) {
-
   let j = {};
 
   try {
@@ -405,7 +394,6 @@ async function readResponse(r) {
   } catch {}
 
   if (!r.ok) {
-
     throw new Error(
       j.detail || "Request failed"
     );
@@ -420,11 +408,8 @@ async function readResponse(r) {
 // --------------------------------------------------
 
 function requirementPayload() {
-
   return {
-
     role: $("role").value,
-
     skills: $("skills").value,
 
     min_experience:
@@ -438,7 +423,6 @@ function requirementPayload() {
 
     threshold:
       Number($("threshold").value)
-
   };
 }
 
@@ -448,13 +432,10 @@ function requirementPayload() {
 // --------------------------------------------------
 
 function updateFromResponse(j) {
-
   candidates = j.candidates || [];
-
   exceptions = j.exceptions || [];
 
   renderResults();
-
   renderDirectory();
 
   loadDashboard();
@@ -466,17 +447,13 @@ function updateFromResponse(j) {
 // --------------------------------------------------
 
 async function processFiles() {
-
-  const data =
-    $("candidateFile").files[0];
+  const data = $("candidateFile")?.files[0];
 
   if (!data) {
-
     message(
       "Please choose a CSV or Excel candidate file.",
       "error"
     );
-
     return;
   }
 
@@ -491,12 +468,9 @@ async function processFiles() {
   );
 
   $("processBtn").disabled = true;
-
-  $("processBtn").textContent =
-    "Processing…";
+  $("processBtn").textContent = "Processing…";
 
   try {
-
     const r = await fetch(
       API_BASE + "/api/screen",
       {
@@ -509,7 +483,7 @@ async function processFiles() {
 
     updateFromResponse(j);
 
-    $("resultsPanel").scrollIntoView({
+    $("resultsPanel")?.scrollIntoView({
       behavior: "smooth"
     });
 
@@ -518,108 +492,100 @@ async function processFiles() {
     );
 
     $("candidateFile").value = "";
-
     updateFileNames();
 
   } catch (e) {
-
     message(e.message, "error");
 
   } finally {
-
     $("processBtn").disabled = false;
 
     $("processBtn").innerHTML =
       'Process candidates <b>→</b>';
-
   }
 }
 
-
-$("processBtn").addEventListener(
-  "click",
-  processFiles
-);
+if ($("processBtn")) {
+  $("processBtn").addEventListener(
+    "click",
+    processFiles
+  );
+}
 
 
 // --------------------------------------------------
 // APPLY UPDATED REQUIREMENTS
 // --------------------------------------------------
 
-$("applyRequirements").addEventListener(
-  "click",
-  async () => {
+if ($("applyRequirements")) {
+  $("applyRequirements").addEventListener(
+    "click",
+    async () => {
+      const b = $("applyRequirements");
 
-    const b = $("applyRequirements");
-
-    b.disabled = true;
-
-    b.textContent =
-      "Re-screening current dataset…";
-
-    try {
-
-      const r = await fetch(
-        API_BASE + "/api/requirements",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify(
-            requirementPayload()
-          )
-        }
-      );
-
-      const j = await readResponse(r);
-
-      updateFromResponse(j);
-
-      message(
-        `Requirements updated. Current dataset re-screened: ${matched().length} matched, ${rejected().length} rejected, ${exceptions.length} exceptions.`
-      );
-
-      toast(
-        "Requirements applied successfully"
-      );
-
-    } catch (e) {
-
-      message(e.message, "error");
-
-    } finally {
-
-      b.disabled = false;
-
+      b.disabled = true;
       b.textContent =
-        "↻ Apply updated requirements to current dataset";
+        "Re-screening current dataset…";
 
+      try {
+        const r = await fetch(
+          API_BASE + "/api/requirements",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(
+              requirementPayload()
+            )
+          }
+        );
+
+        const j = await readResponse(r);
+
+        updateFromResponse(j);
+
+        message(
+          `Requirements updated. Current dataset re-screened: ${matched().length} matched, ${rejected().length} rejected, ${exceptions.length} exceptions.`
+        );
+
+        toast("Requirements applied successfully");
+
+      } catch (e) {
+        message(e.message, "error");
+
+      } finally {
+        b.disabled = false;
+
+        b.textContent =
+          "↻ Apply updated requirements to current dataset";
+      }
     }
-
-  }
-);
+  );
+}
 
 
 // --------------------------------------------------
 // CANDIDATE FILE SELECTION
 // --------------------------------------------------
 
-$("candidateFile").addEventListener(
-  "change",
-  updateFileNames
-);
-
+if ($("candidateFile")) {
+  $("candidateFile").addEventListener(
+    "change",
+    updateFileNames
+  );
+}
 
 function updateFileNames() {
-
   const name =
-    $("candidateFile").files[0]?.name;
+    $("candidateFile")?.files[0]?.name;
 
-  $("fileNames").textContent =
-    name || "No files selected";
+  if ($("fileNames")) {
+    $("fileNames").textContent =
+      name || "No files selected";
+  }
 }
 
 
@@ -630,17 +596,14 @@ function updateFileNames() {
 document.addEventListener(
   "change",
   async e => {
-
     if (!e.target.matches(".review-select")) {
       return;
     }
 
     const id = e.target.dataset.id;
-
     const status = e.target.value;
 
     try {
-
       const r = await fetch(
         API_BASE + "/api/review",
         {
@@ -671,15 +634,11 @@ document.addEventListener(
       toast("HR review status saved");
 
       renderResults();
-
       loadDashboard();
 
     } catch (err) {
-
       toast(err.message);
-
     }
-
   }
 );
 
@@ -689,62 +648,47 @@ document.addEventListener(
 // --------------------------------------------------
 
 function renderDirectory() {
-
   if (!$("directoryRows")) return;
 
   const q = (
-    $("candidateSearch").value || ""
+    $("candidateSearch")?.value || ""
   ).toLowerCase();
 
   const filtered = candidates.filter(c =>
-
     [
       c.full_name,
       c.email,
       c.applied_role,
       c.candidate_id
-
     ].join(" ").toLowerCase().includes(q)
-
   );
 
   $("directoryRows").innerHTML =
     filtered.map(c => `
-
       <tr>
         <td>${esc(c.candidate_id)}</td>
-
         <td>${esc(c.full_name)}</td>
-
         <td>${esc(c.email)}</td>
-
         <td>${esc(c.applied_role)}</td>
-
         <td>${esc(c.experience_years)}</td>
-
-        <td>
-          ${Number(c.match_score).toFixed(1)}%
-        </td>
-
+        <td>${Number(c.match_score).toFixed(1)}%</td>
         <td>${esc(c.hr_review_status)}</td>
       </tr>
-
     `).join("") || `
-
       <tr>
         <td colspan="7" class="empty-note">
           No matching candidates.
         </td>
       </tr>
-
     `;
 }
 
-
-$("candidateSearch").addEventListener(
-  "input",
-  renderDirectory
-);
+if ($("candidateSearch")) {
+  $("candidateSearch").addEventListener(
+    "input",
+    renderDirectory
+  );
+}
 
 
 // --------------------------------------------------
@@ -752,11 +696,8 @@ $("candidateSearch").addEventListener(
 // --------------------------------------------------
 
 function downloadCSV(rows, name) {
-
   if (!rows.length) {
-
     toast("No data to export yet");
-
     return;
   }
 
@@ -767,63 +708,60 @@ function downloadCSV(rows, name) {
   ];
 
   const csv = [
-
     keys.join(","),
 
     ...rows.map(r =>
-
       keys.map(k =>
-
         `"${String(r[k] ?? "").replace(/"/g, '""')}"`
-
       ).join(",")
-
     )
-
   ].join("\n");
 
   const a = document.createElement("a");
 
-  a.href = URL.createObjectURL(
+  const url = URL.createObjectURL(
     new Blob(
       [csv],
-      { type: "text/csv" }
+      { type: "text/csv;charset=utf-8;" }
     )
   );
 
+  a.href = url;
   a.download = name;
-
   a.click();
 
-  URL.revokeObjectURL(a.href);
+  URL.revokeObjectURL(url);
 }
 
+if ($("downloadExcel")) {
+  $("downloadExcel").addEventListener(
+    "click",
+    () => downloadCSV(
+      candidates,
+      "DIT_HR_Screening_Results.csv"
+    )
+  );
+}
 
-$("downloadExcel").addEventListener(
-  "click",
-  () => downloadCSV(
-    candidates,
-    "DIT_HR_Screening_Results.csv"
-  )
-);
+if ($("reportCsv")) {
+  $("reportCsv").addEventListener(
+    "click",
+    () => downloadCSV(
+      candidates,
+      "DIT_HR_Candidate_Report.csv"
+    )
+  );
+}
 
-
-$("reportCsv").addEventListener(
-  "click",
-  () => downloadCSV(
-    candidates,
-    "DIT_HR_Candidate_Report.csv"
-  )
-);
-
-
-$("reportExceptions").addEventListener(
-  "click",
-  () => downloadCSV(
-    exceptions,
-    "DIT_HR_Data_Exceptions.csv"
-  )
-);
+if ($("reportExceptions")) {
+  $("reportExceptions").addEventListener(
+    "click",
+    () => downloadCSV(
+      exceptions,
+      "DIT_HR_Data_Exceptions.csv"
+    )
+  );
+}
 
 
 // --------------------------------------------------
@@ -831,9 +769,7 @@ $("reportExceptions").addEventListener(
 // --------------------------------------------------
 
 async function loadDashboard() {
-
   try {
-
     const r = await fetch(
       API_BASE + "/api/dashboard",
       {
@@ -844,7 +780,6 @@ async function loadDashboard() {
     const d = await readResponse(r);
 
     candidates = d.candidates || [];
-
     exceptions = d.exceptions || [];
 
     const s = d.stats || {};
@@ -852,87 +787,106 @@ async function loadDashboard() {
 
     // MAIN STATISTICS
 
-    $("mTotal").textContent =
-      s.total_candidates || 0;
+    if ($("mTotal")) {
+      $("mTotal").textContent =
+        s.total_candidates ?? 0;
+    }
 
-    $("mValid").textContent =
-      s.valid_candidates || 0;
+    if ($("mValid")) {
+      $("mValid").textContent =
+        s.valid_candidates ?? 0;
+    }
 
-    $("mScore").textContent =
-      `${Number(
-        s.average_match_score || 0
-      ).toFixed(1)}%`;
+    if ($("mScore")) {
+      $("mScore").textContent =
+        `${Number(s.average_match_score || 0).toFixed(1)}%`;
+    }
 
-    $("mPending").textContent =
-      s.pending_review || 0;
+    if ($("mPending")) {
+      $("mPending").textContent =
+        s.pending_review ?? 0;
+    }
+
+
+    // EXACT EXPERIENCE MATCH CARD
+
+    const exactCount =
+      Number(s.exact_experience_candidates ?? 0);
+
+    const experienceYears =
+      Number(s.experience_requirement ?? 0);
+
+    if ($("mExactExperience")) {
+      $("mExactExperience").textContent =
+        exactCount;
+    }
+
+    if ($("mExperienceRequirement")) {
+      $("mExperienceRequirement").textContent =
+        `Candidates with exactly ${experienceYears} years`;
+    }
+
+    // Extra exact-experience note below valid candidate count
+    updateExperienceCount(
+      exactCount,
+      experienceYears
+    );
 
 
     // LAST UPDATED
 
-    $("lastUpdated").textContent =
-      d.updated_at
-        ? `Updated ${new Date(
-            d.updated_at
-          ).toLocaleString()}`
-        : "No saved activity";
+    if ($("lastUpdated")) {
+      $("lastUpdated").textContent =
+        d.updated_at
+          ? `Updated ${new Date(d.updated_at).toLocaleString()}`
+          : "No saved activity";
+    }
 
 
     // REVIEW PIPELINE
 
-    $("pipeline").innerHTML =
-
-      Object.entries(
-        s.status_counts || {}
-      ).map(([k, v]) => `
-
-        <div class="pipe-row">
-          <span>${esc(k)}</span>
-          <b class="pipe-count">${v}</b>
-        </div>
-
-      `).join("") || `
-
-        <div class="empty-note">
-          No review activity yet.
-        </div>
-
-      `;
+    if ($("pipeline")) {
+      $("pipeline").innerHTML =
+        Object.entries(
+          s.status_counts || {}
+        ).map(([k, v]) => `
+          <div class="pipe-row">
+            <span>${esc(k)}</span>
+            <b class="pipe-count">${v}</b>
+          </div>
+        `).join("") || `
+          <div class="empty-note">
+            No review activity yet.
+          </div>
+        `;
+    }
 
 
     // RENDER TABLES
 
     renderResults();
-
     renderDirectory();
-
-
-    // EXACT EXPERIENCE COUNT
-
-    updateExperienceCount(
-      s.exact_experience_candidates || 0,
-      s.experience_requirement || 0
-    );
 
 
     // SCORE CHART
 
     const ctx = $("scoreChart");
 
-    $("chartEmpty").style.display =
-      candidates.length ? "none" : "block";
+    if ($("chartEmpty")) {
+      $("chartEmpty").style.display =
+        candidates.length ? "none" : "block";
+    }
 
     if (chart) {
       chart.destroy();
+      chart = null;
     }
 
-    if (candidates.length) {
-
+    if (ctx && candidates.length && typeof Chart !== "undefined") {
       chart = new Chart(ctx, {
-
         type: "bar",
 
         data: {
-
           labels: [
             "0–20",
             "21–40",
@@ -942,46 +896,32 @@ async function loadDashboard() {
           ],
 
           datasets: [{
-
             label: "Candidates",
 
             data: [0, 0, 0, 0, 0].map(
               (_, i) =>
-
                 candidates.filter(c => {
-
-                  const n =
-                    Number(c.match_score);
+                  const n = Number(c.match_score);
 
                   return i === 0
                     ? n <= 20
-
                     : i === 1
                     ? n > 20 && n <= 40
-
                     : i === 2
                     ? n > 40 && n <= 60
-
                     : i === 3
                     ? n > 60 && n <= 80
-
                     : n > 80;
-
                 }).length
             ),
 
             backgroundColor: "#4b86c4",
-
             borderRadius: 5
-
           }]
-
         },
 
         options: {
-
           responsive: true,
-
           maintainAspectRatio: false,
 
           plugins: {
@@ -991,7 +931,6 @@ async function loadDashboard() {
           },
 
           scales: {
-
             y: {
               beginAtZero: true,
               ticks: {
@@ -1004,25 +943,17 @@ async function loadDashboard() {
                 display: false
               }
             }
-
           }
-
         }
-
       });
-
     }
 
     return true;
 
   } catch (e) {
-
-    console.warn(e);
-
+    console.warn("Dashboard error:", e);
     return false;
-
   }
-
 }
 
 
