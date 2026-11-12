@@ -219,6 +219,7 @@ function renderResults() {
       candidates.length + exceptions.length;
   }
 
+  // Screening results page: all data-valid candidates
   if ($("rValid")) {
     $("rValid").textContent = candidates.length;
   }
@@ -232,38 +233,6 @@ function renderResults() {
   }
 
   renderSeparatedViews();
-}
-
-
-// --------------------------------------------------
-// EXACT EXPERIENCE COUNT DISPLAY
-// --------------------------------------------------
-
-function updateExperienceCount(count, years) {
-  const displayYears = Number(years);
-
-  ["rValid", "mValid"].forEach(id => {
-    const target = $(id);
-
-    if (!target) return;
-
-    let note = $(id + "ExperienceNote");
-
-    if (!note) {
-      note = document.createElement("small");
-
-      note.id = id + "ExperienceNote";
-      note.style.display = "block";
-      note.style.marginTop = "8px";
-      note.style.fontSize = "12px";
-      note.style.color = "#26734d";
-
-      target.insertAdjacentElement("afterend", note);
-    }
-
-    note.textContent =
-      `Exact ${displayYears}-year matches: ${count}`;
-  });
 }
 
 
@@ -784,17 +753,25 @@ async function loadDashboard() {
 
     const s = d.stats || {};
 
+    // EXACT EXPERIENCE COUNT
+    const exactCount =
+      Number(s.exact_experience_candidates ?? 0);
 
-    // MAIN STATISTICS
+    const experienceYears =
+      Number(s.experience_requirement ?? 0);
+
+
+    // MAIN DASHBOARD STATISTICS
 
     if ($("mTotal")) {
       $("mTotal").textContent =
         s.total_candidates ?? 0;
     }
 
+    // Valid Candidates box now shows exact experience matches
     if ($("mValid")) {
       $("mValid").textContent =
-        s.valid_candidates ?? 0;
+        exactCount;
     }
 
     if ($("mScore")) {
@@ -806,31 +783,6 @@ async function loadDashboard() {
       $("mPending").textContent =
         s.pending_review ?? 0;
     }
-
-
-    // EXACT EXPERIENCE MATCH CARD
-
-    const exactCount =
-      Number(s.exact_experience_candidates ?? 0);
-
-    const experienceYears =
-      Number(s.experience_requirement ?? 0);
-
-    if ($("mExactExperience")) {
-      $("mExactExperience").textContent =
-        exactCount;
-    }
-
-    if ($("mExperienceRequirement")) {
-      $("mExperienceRequirement").textContent =
-        `Candidates with exactly ${experienceYears} years`;
-    }
-
-    // Extra exact-experience note below valid candidate count
-    updateExperienceCount(
-      exactCount,
-      experienceYears
-    );
 
 
     // LAST UPDATED
