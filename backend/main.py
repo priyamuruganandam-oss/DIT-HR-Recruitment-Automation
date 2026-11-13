@@ -37,7 +37,7 @@ DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(
     title="DIT HR Recruitment API",
-    version="1.2.0"
+    version="1.3.0"
 )
 
 origins = [
@@ -60,10 +60,8 @@ app.add_middleware(
 # --------------------------------------------------
 
 def connect():
-
     con = sqlite3.connect(DB_PATH)
     con.row_factory = sqlite3.Row
-
     return con
 
 
@@ -253,14 +251,14 @@ def run_screening(raw_df, settings):
     )
 
     if not screened.empty:
-
         screened["applied_role"] = settings["role"]
 
     return screened, exceptions
 
 
 # --------------------------------------------------
-# FETCH DATABASE RECORDS
+# FETCH ALL DATABASE RECORDS
+# NO ROW LIMIT
 # --------------------------------------------------
 
 def all_rows():
@@ -577,12 +575,12 @@ def review(data: ReviewUpdate):
 @app.get("/api/dashboard")
 def dashboard():
 
+    # Fetch ALL candidates and ALL exceptions
     data = all_rows()
     exceptions = all_exceptions()
 
     df = pd.DataFrame(data)
 
-    # Read the currently selected experience requirement
     with connect() as c:
 
         saved_settings = c.execute(
@@ -628,7 +626,6 @@ def dashboard():
 
     else:
 
-        # HR review status
         status = (
             df["hr_review_status"]
             .fillna("Pending HR review")
@@ -636,7 +633,6 @@ def dashboard():
             .to_dict()
         )
 
-        # Matched and rejected counts
         matched = int(
             (
                 df["screening_recommendation"]
@@ -651,7 +647,6 @@ def dashboard():
             ).sum()
         )
 
-        # EXACT EXPERIENCE COUNT
         experience_values = pd.to_numeric(
             df["experience_years"],
             errors="coerce"
@@ -674,7 +669,6 @@ def dashboard():
             "total_candidates": len(df) + len(exceptions),
             "valid_candidates": len(df),
 
-            # New statistic for the dashboard
             "exact_experience_candidates": exact_experience_count,
             "experience_requirement": experience_requirement,
 
@@ -699,10 +693,14 @@ def dashboard():
             "rejected_candidates": rejected
         }
 
+    # IMPORTANT:
+    # No [:1000] slicing.
+    # Return every saved candidate and exception.
+
     return {
         "stats": stats,
-        "candidates": data[:1000],
-        "exceptions": exceptions[:1000],
+        "candidates": data,
+        "exceptions": exceptions,
         "updated_at": (
             saved_dataset["updated_at"]
             if saved_dataset
